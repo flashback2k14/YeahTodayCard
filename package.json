@@ -1,0 +1,19 @@
+{
+  "name": "yeahtodaycard",
+  "version": "1.0.0",
+  "description": "inspired by https://thetodaysystem.com/",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flashback2k14/YeahTodayCard.git"
+  },
+  "keywords": [],
+  "author": "flashback2k14",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flashback2k14/YeahTodayCard/issues"
+  },
+  "homepage": "https://github.com/flashback2k14/YeahTodayCard#readme"
+}
