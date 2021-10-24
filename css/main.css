@@ -28,20 +28,49 @@ main {
 }
 
 .card-list {
-  margin: 16px;
+  width: 100vw;
+  margin: 32px;
   padding: 0;
   list-style: none;
 }
 
-.card-list_item {
-  font-size: large;
+.card-item {
+  margin: 4px;
   padding-top: 4px;
   padding-bottom: 4px;
   border-bottom: 1px #424242 solid;
+  cursor: pointer;
+  transition: 0.4s;
 }
 
-.card-list_item:last-child {
+.card-item:last-child {
   border-bottom: none;
+}
+
+.active,
+.card-item:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.card-item_title {
+  margin: 4px 0;
+  font-size: large;
+}
+
+.card-item_title:after {
+  float: right;
+  margin-left: 4px;
+  margin-right: 4px;
+  color: #000;
+  content: '\002B';
+}
+
+.active:after {
+  content: '\2212';
+}
+
+.card-item_content {
+  margin: 4px 0;
 }
 
 footer {
@@ -53,4 +82,12 @@ footer {
 
 footer span {
   margin-left: 8px;
+}
+
+.visible {
+  display: flex;
+}
+
+.hidden {
+  display: none;
 }
