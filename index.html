@@ -5,35 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Yeah! Today card</title>
-    <link rel="stylesheet" href="css/main.css" />
+    <script src="/src/components/tc-app.ts" type="module"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;400&display=swap');
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: 'Roboto Mono', monospace;
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <span>Yeah! Today card</span>
-    </header>
-    <main>
-      <ul class="card-list">
-        <li class="card-item">
-          <span class="card-item_title">item #1</span>
-          <section class="card-item_content hidden">Lorem ipsum.</section>
-        </li>
-        <li class="card-item">
-          <span class="card-item_title">item #2</span>
-          <section class="card-item_content hidden">Lorem ipsum.</section>
-        </li>
-        <li class="card-item">
-          <span class="card-item_title">item #3</span>
-          <section class="card-item_content hidden">Lorem ipsum.</section>
-        </li>
-        <li class="card-item">
-          <span class="card-item_title">item #4</span>
-          <section class="card-item_content hidden">Lorem ipsum.</section>
-        </li>
-      </ul>
-    </main>
-    <footer>
-      <span>github</span>
-    </footer>
-    <script src="js/main.js"></script>
+    <tc-app></tc-app>
   </body>
 </html>
