@@ -13,6 +13,7 @@ inspired by https://thetodaysystem.com/
   - https://github.com/litelement-dev/lit-simple-starter-kit
 - Lit router
   - https://www.thisdot.co/blog/navigation-lifecycle-using-vaadin-router-litelement-and-typescript
+  - https://github.com/luixaviles/litelement-website
 - Dark mode
   - https://css-tricks.com/a-complete-guide-to-dark-mode-on-the-web/
   - https://github.com/kevquirk/simple.css
