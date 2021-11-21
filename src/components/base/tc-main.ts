@@ -8,8 +8,7 @@ class TcMain extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: calc(100vh - 48px - 48px - 16px);
-      padding: 8px 0;
+      height: calc(100vh - 48px - 48px);
       overflow: auto;
     }
   `;

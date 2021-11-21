@@ -22,15 +22,44 @@ class TcLogin extends LitElement {
 
     form label span {
       flex: none;
+      padding: 0.25em 0.5em;
     }
 
     form label input {
       flex-grow: 1;
       margin-left: 16px;
+      padding: 0.25em 0.5em;
+      border: 1px solid #000;
+      border-radius: 2px;
+      font-size: medium;
+    }
+
+    form label input:hover {
+      border: 1px solid rgb(29, 233, 182);
+    }
+
+    form label input:focus {
+      border: 1px solid rgb(29, 233, 182);
+      outline: 1px solid rgb(29, 233, 182);
     }
 
     form button {
       font-size: medium;
+      padding: 0.5em;
+      background-image: linear-gradient(45deg, rgb(83, 109, 254) 0%, rgb(106, 61, 232) 100%);
+      border: none;
+      color: #fff;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    form button:focus {
+      box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+      border: none;
     }
 
     /* Smartphones (portrait and landscape) ----------- */

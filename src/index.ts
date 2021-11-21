@@ -45,6 +45,5 @@ const routes: Route[] = [
   },
 ];
 
-const outlet = document.getElementById('outlet');
-export const router = new Router(outlet);
+export const router = new Router(document.getElementById('outlet'));
 router.setRoutes(routes);

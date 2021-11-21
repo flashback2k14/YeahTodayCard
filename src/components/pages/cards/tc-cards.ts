@@ -9,8 +9,11 @@ import './tc-card.js';
 class TcCards extends LitElement {
   static styles = css`
     .card-list {
+      display: flex;
+      flex-direction: column;
+      height: calc((100vh - 48px) - 48px);
       width: 90vw;
-      margin: 32px;
+      margin: 0;
       padding: 0;
       list-style: none;
     }

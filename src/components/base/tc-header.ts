@@ -17,12 +17,12 @@ class TcHeader extends LitElement {
     }
 
     header span {
-      margin-left: 8px;
+      margin-left: 16px;
     }
 
     header img {
       margin-top: 4px;
-      margin-right: 8px;
+      margin-right: 16px;
       cursor: pointer;
     }
   `;
@@ -43,7 +43,7 @@ class TcHeader extends LitElement {
   protected render() {
     return html`<header>
       <span>Yeah! today card</span>
-      ${this._isAuthorized ? html`<img src="/assets/logout.svg" @click=${this._logout} />` : null}
+      ${this._isAuthorized ? html`<img title="Logout" src="/assets/logout.svg" @click=${this._logout} />` : null}
     </header>`;
   }
 
