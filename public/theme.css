@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;400&display=swap');
+@import 'https://unpkg.com/open-props';
+
+:root {
+  --background: var(--gray-0, white);
+  --color: black;
+  --border-table: black;
+
+  --surface-shadow-light: 200 10% 20%;
+  --shadow-strength-light: 0.02;
+}
+
+[data-theme='dark'] {
+  --background: var(--gray-9, black);
+  --color: white;
+  --border-table: white;
+
+  --surface-shadow-dark: 200 50% 3%;
+  --shadow-strength-dark: 0.8;
+}
+
+* {
+  accent-color: rgb(29, 233, 182);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Roboto Mono', monospace;
+
+  background: var(--background);
+  color: var(--color);
+}

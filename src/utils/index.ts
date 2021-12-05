@@ -39,6 +39,26 @@ class InMemoryStore {
           } as EntryDetail,
         ],
       } as Entry,
+      {
+        id: uuidV4(),
+        title: 'Day: 02.11.2021',
+        totalPoints: 4,
+        totalAwardedPoints: 3,
+        details: [
+          {
+            id: uuidV4(),
+            task: 'Task #4',
+            points: 3,
+            awardedPoints: 2,
+          } as EntryDetail,
+          {
+            id: uuidV4(),
+            task: 'Task #5',
+            points: 1,
+            awardedPoints: 1,
+          } as EntryDetail,
+        ],
+      } as Entry,
     ];
   }
 

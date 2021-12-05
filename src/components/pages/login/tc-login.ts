@@ -32,6 +32,9 @@ class TcLogin extends LitElement {
       border: 1px solid #000;
       border-radius: 2px;
       font-size: medium;
+
+      background: var(--background);
+      color: var(--color);
     }
 
     form label input:hover {

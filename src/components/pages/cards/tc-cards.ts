@@ -7,7 +7,7 @@ import { store } from '../../../utils';
 import './tc-card.js';
 
 @customElement('tc-cards')
-class TcCards extends LitElement {
+export class TcCards extends LitElement {
   static styles = css`
     .card-list {
       display: flex;

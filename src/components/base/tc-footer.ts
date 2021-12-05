@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 @customElement('tc-footer')
-class TcFooter extends LitElement {
+export class TcFooter extends LitElement {
   static styles = css`
     footer {
       display: flex;
@@ -12,7 +12,7 @@ class TcFooter extends LitElement {
     }
 
     footer span {
-      margin-left: 8px;
+      margin-left: 16px;
     }
   `;
 

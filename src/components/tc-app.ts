@@ -6,7 +6,7 @@ import './base/tc-main.js';
 import './base/tc-footer.js';
 
 @customElement('tc-app')
-class TcApp extends LitElement {
+export class TcApp extends LitElement {
   protected render() {
     return html`
       <tc-header></tc-header>

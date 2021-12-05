@@ -5,13 +5,17 @@ import { ClassInfo, classMap } from 'lit/directives/class-map.js';
 import { Entry, EntryDetail } from '../../../models';
 
 @customElement('tc-card')
-class TcCard extends LitElement {
+export class TcCard extends LitElement {
   static styles = css`
     .card-item {
       margin: 4px;
       padding: 4px;
       border-bottom: 1px #424242 solid;
       transition: 0.4s;
+
+      border-radius: var(--radius-2);
+      padding: var(--size-fluid-3);
+      box-shadow: var(--shadow-2);
     }
 
     .card-item:last-child {
@@ -25,15 +29,14 @@ class TcCard extends LitElement {
     }
 
     .card-item_title:hover {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
+      border-bottom: 1px solid var(--border-table);
     }
 
     .card-item_title:after {
       float: right;
       margin-left: 4px;
       margin-right: 4px;
-      color: #000;
+      color: var(--color);
       content: '\\002B';
     }
 
@@ -56,6 +59,65 @@ class TcCard extends LitElement {
     .hidden {
       display: none;
     }
+
+    table {
+      width: 100%;
+      margin-top: 8px;
+      border-collapse: collapse;
+    }
+
+    thead tr th:first-child {
+      flex-grow: 1;
+      border-bottom: 1px solid var(--border-table);
+      border-right: 1px solid var(--border-table);
+    }
+
+    thead tr th:nth-child(2) {
+      flex: none;
+      width: 48px;
+      border-bottom: 1px solid var(--border-table);
+      border-right: 1px solid var(--border-table);
+      text-align: center;
+    }
+
+    thead tr th:last-child {
+      flex: none;
+      width: 48px;
+      border-bottom: 1px solid var(--border-table);
+      text-align: center;
+    }
+
+    tbody tr td:first-child {
+      border-right: 1px solid var(--border-table);
+    }
+
+    tbody tr td:nth-child(2) {
+      border-right: 1px solid var(--border-table);
+      text-align: center;
+    }
+
+    tbody tr td:last-child {
+      text-align: center;
+    }
+
+    tfoot tr td:first-child {
+      border-top: 1px solid var(--border-table);
+      border-right: 1px solid var(--border-table);
+      font-weight: bold;
+    }
+
+    tfoot tr td:nth-child(2) {
+      border-top: 1px solid var(--border-table);
+      border-right: 1px solid var(--border-table);
+      text-align: center;
+      font-weight: bold;
+    }
+
+    tfoot tr td:last-child {
+      border-top: 1px solid var(--border-table);
+      text-align: center;
+      font-weight: bold;
+    }
   `;
 
   @property({ type: Object })
@@ -64,12 +126,12 @@ class TcCard extends LitElement {
   @state()
   private _isHidden: boolean = true;
 
-  protected render() {
+  protected render(): TemplateResult {
     const score = this._calculateScore();
     return html`<li class="card-item">
-      <span class=${classMap(this._getTitleClasses())} @click=${this._changeVisibility}
-        >${this.entry?.title} - ${score}</span
-      >
+      <span class=${classMap(this._getTitleClasses())} @click=${this._changeVisibility}>
+        ${this.entry?.title} - ${score}
+      </span>
       <section class=${classMap(this._getContentClasses())}>${this._tableTemplate()}</section>
     </li>`;
   }
@@ -79,38 +141,28 @@ class TcCard extends LitElement {
   }
 
   private _tableTemplate(): TemplateResult {
-    return html`<table style="width: 100%; margin-top: 8px; border-collapse: collapse;">
+    return html`<table>
       <thead>
         <tr>
-          <th style="flex-grow: 1; border-bottom: 1px solid black; border-right: 1px solid black;">Tasks</th>
-          <th
-            style="flex: none; width: 48px; border-bottom: 1px solid black; border-right: 1px solid black; text-align: center;"
-          >
-            P
-          </th>
-          <th style="flex: none; width: 48px; border-bottom: 1px solid black; text-align: center;">A</th>
+          <th>Tasks</th>
+          <th>P</th>
+          <th>A</th>
         </tr>
       </thead>
       <tbody>
         ${this.entry?.details.map((detail: EntryDetail) => {
           return html`<tr>
-            <td style="border-right: 1px solid black;">${detail.task}</td>
-            <td style="border-right: 1px solid black; text-align: center;">${detail.points}</td>
-            <td style="text-align: center;">${detail.awardedPoints}</td>
+            <td>${detail.task}</td>
+            <td>${detail.points}</td>
+            <td>${detail.awardedPoints}</td>
           </tr>`;
         })}
       </tbody>
       <tfoot>
         <tr>
-          <td style="border-top: 1px solid black; border-right: 1px solid black; font-weight: bold;">Sum</td>
-          <td
-            style="border-top: 1px solid black; border-right: 1px solid black; text-align: center; font-weight: bold;"
-          >
-            ${this.entry?.totalPoints}
-          </td>
-          <td style="border-top: 1px solid black; text-align: center; font-weight: bold;">
-            ${this.entry?.totalAwardedPoints}
-          </td>
+          <td>Sum</td>
+          <td>${this.entry?.totalPoints}</td>
+          <td>${this.entry?.totalAwardedPoints}</td>
         </tr>
       </tfoot>
     </table>`;
