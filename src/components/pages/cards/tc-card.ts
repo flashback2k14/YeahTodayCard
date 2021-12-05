@@ -8,14 +8,13 @@ import { Entry, EntryDetail } from '../../../models';
 export class TcCard extends LitElement {
   static styles = css`
     .card-item {
-      margin: 4px;
-      padding: 4px;
-      border-bottom: 1px #424242 solid;
-      transition: 0.4s;
+      margin: 8px 4px;
+      padding: var(--size-fluid-3);
 
       border-radius: var(--radius-2);
-      padding: var(--size-fluid-3);
       box-shadow: var(--shadow-2);
+
+      transition: 0.4s;
     }
 
     .card-item:last-child {

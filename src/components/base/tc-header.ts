@@ -18,6 +18,8 @@ export class TcHeader extends LitElement {
 
     header span {
       margin-left: 16px;
+      font-size: larger;
+      letter-spacing: var(--font-letterspacing-1);
     }
 
     header svg {
