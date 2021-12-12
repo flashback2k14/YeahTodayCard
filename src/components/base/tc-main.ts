@@ -1,17 +1,11 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+
+import { mainStyles } from '../../styles';
 
 @customElement('tc-main')
 export class TcMain extends LitElement {
-  static styles = css`
-    main {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: calc(100vh - 48px - 48px);
-      overflow: auto;
-    }
-  `;
+  static styles = mainStyles;
 
   protected render() {
     return html`<main>

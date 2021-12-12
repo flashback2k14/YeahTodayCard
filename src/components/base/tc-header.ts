@@ -1,34 +1,15 @@
-import { LitElement, html, css, TemplateResult } from 'lit';
+import { LitElement, html, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import { Router } from '@vaadin/router';
 
 import { AuthorizationService } from '../../auth/authorization-service';
 import EventBus, { EventNames } from '../../utils/event-bus';
+import { headerStyles } from '../../styles';
 
 @customElement('tc-header')
 export class TcHeader extends LitElement {
-  static styles = css`
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 48px;
-    }
-
-    header span {
-      margin-left: 16px;
-      font-size: larger;
-      letter-spacing: var(--font-letterspacing-1);
-    }
-
-    header svg {
-      margin-top: 4px;
-      margin-right: 16px;
-      cursor: pointer;
-      color: var(--color);
-    }
-  `;
+  static styles = headerStyles;
 
   @state()
   private _isAuthorized = AuthorizationService.isAuthorized();

@@ -1,123 +1,13 @@
-import { LitElement, html, css, TemplateResult } from 'lit';
+import { LitElement, html, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ClassInfo, classMap } from 'lit/directives/class-map.js';
 
 import { Entry, EntryDetail } from '../../../models';
+import { cardStyles } from '../../../styles';
 
 @customElement('tc-card')
 export class TcCard extends LitElement {
-  static styles = css`
-    .card-item {
-      margin: 8px 4px;
-      padding: var(--size-fluid-3);
-
-      border-radius: var(--radius-2);
-      box-shadow: var(--shadow-2);
-
-      transition: 0.4s;
-    }
-
-    .card-item:last-child {
-      border-bottom: none;
-    }
-
-    .card-item_title {
-      margin: 4px 0;
-      font-size: large;
-      cursor: pointer;
-    }
-
-    .card-item_title:hover {
-      border-bottom: 1px solid var(--border-table);
-    }
-
-    .card-item_title:after {
-      float: right;
-      margin-left: 4px;
-      margin-right: 4px;
-      color: var(--color);
-      content: '\\002B';
-    }
-
-    .card-item_content {
-      margin: 4px 0;
-    }
-
-    .active {
-      font-weight: bold;
-    }
-
-    .active:after {
-      content: '\\2212';
-    }
-
-    .visible {
-      display: flex;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    table {
-      width: 100%;
-      margin-top: 8px;
-      border-collapse: collapse;
-    }
-
-    thead tr th:first-child {
-      flex-grow: 1;
-      border-bottom: 1px solid var(--border-table);
-      border-right: 1px solid var(--border-table);
-    }
-
-    thead tr th:nth-child(2) {
-      flex: none;
-      width: 48px;
-      border-bottom: 1px solid var(--border-table);
-      border-right: 1px solid var(--border-table);
-      text-align: center;
-    }
-
-    thead tr th:last-child {
-      flex: none;
-      width: 48px;
-      border-bottom: 1px solid var(--border-table);
-      text-align: center;
-    }
-
-    tbody tr td:first-child {
-      border-right: 1px solid var(--border-table);
-    }
-
-    tbody tr td:nth-child(2) {
-      border-right: 1px solid var(--border-table);
-      text-align: center;
-    }
-
-    tbody tr td:last-child {
-      text-align: center;
-    }
-
-    tfoot tr td:first-child {
-      border-top: 1px solid var(--border-table);
-      border-right: 1px solid var(--border-table);
-      font-weight: bold;
-    }
-
-    tfoot tr td:nth-child(2) {
-      border-top: 1px solid var(--border-table);
-      border-right: 1px solid var(--border-table);
-      text-align: center;
-      font-weight: bold;
-    }
-
-    tfoot tr td:last-child {
-      border-top: 1px solid var(--border-table);
-      text-align: center;
-      font-weight: bold;
-    }
-  `;
+  static styles = cardStyles;
 
   @property({ type: Object })
   entry?: Entry;
