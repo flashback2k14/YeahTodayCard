@@ -47,6 +47,37 @@ export const footerStyles = css`
   footer span {
     margin-left: 16px;
   }
+
+  footer button {
+    position: absolute;
+    bottom: 48px;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+    border: none;
+
+    box-shadow: var(--shadow-2);
+    transition: all 0.1s ease-in-out;
+
+    background-image: linear-gradient(45deg, rgb(83, 109, 254) 0%, rgb(106, 61, 232) 100%);
+    color: white;
+
+    cursor: pointer;
+  }
+
+  footer button:hover {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  footer button:focus {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    border: none;
+  }
 `;
 
 /**

@@ -2,11 +2,13 @@ import { LitElement, html, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 import { headerStyles } from '../../styles';
-import { HeaderController } from '../../utils/header-controller';
+import { ThemeSwitchController } from '../../controller/theme-switch.controller';
+import { AuthStateController } from '../../controller/auth-state.controller';
 
 @customElement('tc-header')
 export class TcHeader extends LitElement {
-  private _controller = new HeaderController(this);
+  private _themeSwitchController = new ThemeSwitchController(this);
+  private _authStateController = new AuthStateController(this);
 
   static styles = headerStyles;
 
@@ -14,16 +16,16 @@ export class TcHeader extends LitElement {
     return html`<header>
       <span>Yeah! today card</span>
       <div>
-        ${this._controller.isAuthorized ? this._themeTemplate() : null}
-        ${this._controller.isAuthorized ? this._logoutTemplate() : null}
+        ${this._authStateController.isAuthorized ? this._themeTemplate() : null}
+        ${this._authStateController.isAuthorized ? this._logoutTemplate() : null}
       </div>
     </header>`;
   }
 
   private _themeTemplate(): TemplateResult {
-    return this._controller.themeVariante === 'dark'
+    return this._themeSwitchController.themeVariante === 'dark'
       ? html`<svg
-          @click=${this._controller.toggleTheme.bind(this._controller)}
+          @click=${this._themeSwitchController.toggleTheme.bind(this._themeSwitchController)}
           title="Dark theme"
           width="24"
           height="24"
@@ -40,7 +42,7 @@ export class TcHeader extends LitElement {
           />
         </svg> `
       : html`<svg
-          @click=${this._controller.toggleTheme.bind(this._controller)}
+          @click=${this._themeSwitchController.toggleTheme.bind(this._themeSwitchController)}
           title="Light theme"
           width="24"
           height="24"
@@ -68,7 +70,7 @@ export class TcHeader extends LitElement {
 
   private _logoutTemplate(): TemplateResult {
     return html`<svg
-      @click=${this._controller.logout.bind(this._controller)}
+      @click=${this._authStateController.logout.bind(this._authStateController)}
       title="Logout"
       width="24"
       height="24"

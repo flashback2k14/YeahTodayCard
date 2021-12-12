@@ -1,13 +1,8 @@
 import { ReactiveController, ReactiveControllerHost } from '@lit/reactive-element';
-import { Router } from '@vaadin/router';
 
-import { AuthorizationService } from '../auth/authorization-service';
-import EventBus, { EventNames } from './event-bus';
-
-export class HeaderController implements ReactiveController {
+export class ThemeSwitchController implements ReactiveController {
   private _host: ReactiveControllerHost;
 
-  isAuthorized = AuthorizationService.isAuthorized();
   themeVariante: 'light' | 'dark' = 'light';
 
   constructor(host: ReactiveControllerHost) {
@@ -16,7 +11,6 @@ export class HeaderController implements ReactiveController {
   }
 
   hostConnected() {
-    EventBus.register(EventNames.LOGGED_IN, this._handleLoginCallback.bind(this));
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', this._handleThemeChangedCallback.bind(this));
@@ -24,7 +18,6 @@ export class HeaderController implements ReactiveController {
   }
 
   hostDisconnected() {
-    EventBus.remove(EventNames.LOGGED_IN, this._handleLoginCallback.bind(this));
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .removeEventListener('change', this._handleThemeChangedCallback.bind(this));
@@ -39,18 +32,6 @@ export class HeaderController implements ReactiveController {
       this.themeVariante = 'light';
     }
     this._saveTheme();
-    this._host.requestUpdate();
-  }
-
-  logout(): void {
-    AuthorizationService.resetToken();
-    this.isAuthorized = AuthorizationService.isAuthorized();
-    Router.go('/');
-    this._host.requestUpdate();
-  }
-
-  private _handleLoginCallback(): void {
-    this.isAuthorized = AuthorizationService.isAuthorized();
     this._host.requestUpdate();
   }
 
