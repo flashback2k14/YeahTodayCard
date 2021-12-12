@@ -1,41 +1,29 @@
 import { LitElement, html, TemplateResult } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
-import { Router } from '@vaadin/router';
-
-import { AuthorizationService } from '../../auth/authorization-service';
-import EventBus, { EventNames } from '../../utils/event-bus';
 import { headerStyles } from '../../styles';
+import { HeaderController } from '../../utils/header-controller';
 
 @customElement('tc-header')
 export class TcHeader extends LitElement {
+  private _controller = new HeaderController(this);
+
   static styles = headerStyles;
 
-  @state()
-  private _isAuthorized = AuthorizationService.isAuthorized();
-
-  @state()
-  private _themeVariante: 'light' | 'dark' = 'light';
-
-  connectedCallback(): void {
-    super.connectedCallback();
-    EventBus.register(EventNames.LOGGED_IN, this._handleLoggedIn.bind(this));
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this._handleMediaChanges.bind(this));
-    this._getTheme();
+  protected render(): TemplateResult {
+    return html`<header>
+      <span>Yeah! today card</span>
+      <div>
+        ${this._controller.isAuthorized ? this._themeTemplate() : null}
+        ${this._controller.isAuthorized ? this._logoutTemplate() : null}
+      </div>
+    </header>`;
   }
 
-  disconnectedCallback(): void {
-    EventBus.remove(EventNames.LOGGED_IN, this._handleLoggedIn.bind(this));
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .removeEventListener('change', this._handleMediaChanges.bind(this));
-    super.disconnectedCallback();
-  }
-
-  themeTemplate(): TemplateResult {
-    return this._themeVariante === 'dark'
+  private _themeTemplate(): TemplateResult {
+    return this._controller.themeVariante === 'dark'
       ? html`<svg
-          @click=${this._toggleTheme}
+          @click=${this._controller.toggleTheme.bind(this._controller)}
           title="Dark theme"
           width="24"
           height="24"
@@ -52,7 +40,7 @@ export class TcHeader extends LitElement {
           />
         </svg> `
       : html`<svg
-          @click=${this._toggleTheme}
+          @click=${this._controller.toggleTheme.bind(this._controller)}
           title="Light theme"
           width="24"
           height="24"
@@ -78,9 +66,9 @@ export class TcHeader extends LitElement {
         </svg> `;
   }
 
-  logoutTemplate(): TemplateResult {
+  private _logoutTemplate(): TemplateResult {
     return html`<svg
-      @click=${this._logout}
+      @click=${this._controller.logout.bind(this._controller)}
       title="Logout"
       width="24"
       height="24"
@@ -97,53 +85,5 @@ export class TcHeader extends LitElement {
         stroke-linejoin="round"
       />
     </svg>`;
-  }
-
-  protected render(): TemplateResult {
-    return html`<header>
-      <span>Yeah! today card</span>
-      <div>
-        ${this._isAuthorized ? this.themeTemplate() : null} ${this._isAuthorized ? this.logoutTemplate() : null}
-      </div>
-    </header>`;
-  }
-
-  private _handleLoggedIn(): void {
-    this._isAuthorized = AuthorizationService.isAuthorized();
-  }
-
-  private _handleMediaChanges({ matches: isDark }: any): void {
-    this._themeVariante = isDark ? 'dark' : 'light';
-    document.body.setAttribute('data-theme', this._themeVariante);
-    this._saveTheme();
-  }
-
-  private _toggleTheme(): void {
-    if (this._themeVariante === 'light') {
-      document.body.setAttribute('data-theme', 'dark');
-      this._themeVariante = 'dark';
-    } else {
-      document.body.setAttribute('data-theme', 'light');
-      this._themeVariante = 'light';
-    }
-    this._saveTheme();
-  }
-
-  private _getTheme(): void {
-    const theme = localStorage.getItem('YTC:IS:DARK');
-    if (theme) {
-      this._themeVariante = JSON.parse(theme);
-      document.body.setAttribute('data-theme', this._themeVariante);
-    }
-  }
-
-  private _saveTheme(): void {
-    localStorage.setItem('YTC:IS:DARK', JSON.stringify(this._themeVariante));
-  }
-
-  private _logout(): void {
-    AuthorizationService.resetToken();
-    this._isAuthorized = AuthorizationService.isAuthorized();
-    Router.go('/');
   }
 }
