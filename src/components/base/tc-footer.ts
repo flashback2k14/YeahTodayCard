@@ -2,7 +2,7 @@ import { LitElement, html, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import { footerStyles } from '../../styles';
-import Store from '../../utils/store';
+import ConfigStore from '../../store/config-store';
 
 @customElement('tc-footer')
 export class TcFooter extends LitElement {
@@ -13,7 +13,7 @@ export class TcFooter extends LitElement {
 
   constructor() {
     super();
-    Store.select('isAuthenticated').subscribe((value: boolean) => {
+    ConfigStore.select('isAuthenticated').subscribe((value: boolean) => {
       this._isAuthorized = value;
     });
   }

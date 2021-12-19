@@ -6,7 +6,7 @@ import { Router } from '@vaadin/router';
 import { headerStyles } from '../../styles';
 import { ThemeSwitchController } from '../../controller/theme-switch.controller';
 import { AuthorizationService } from '../../auth/authorization-service';
-import Store from '../../utils/store';
+import ConfigStore from '../../store/config-store';
 
 @customElement('tc-header')
 export class TcHeader extends LitElement {
@@ -19,7 +19,7 @@ export class TcHeader extends LitElement {
 
   constructor() {
     super();
-    Store.select('isAuthenticated').subscribe((value: boolean) => {
+    ConfigStore.select('isAuthenticated').subscribe((value: boolean) => {
       this._isAuthorized = value;
     });
   }
@@ -100,7 +100,7 @@ export class TcHeader extends LitElement {
 
   private _logout(): void {
     AuthorizationService.resetToken();
-    Store.dispatch({ type: 'HANDLE_LOGIN', payload: AuthorizationService.isAuthorized() });
+    ConfigStore.dispatch({ type: 'HANDLE_LOGIN', payload: AuthorizationService.isAuthorized() });
     Router.go('/');
   }
 }

@@ -5,7 +5,7 @@ import { Router } from '@vaadin/router';
 
 import { loginStyles } from '../../../styles';
 import { AuthorizationService } from '../../../auth/authorization-service';
-import Store from '../../../utils/store';
+import ConfigStore from '../../../store/config-store';
 
 @customElement('tc-login')
 export class TcLogin extends LitElement {
@@ -40,7 +40,7 @@ export class TcLogin extends LitElement {
     const password = formData.get('password');
 
     AuthorizationService.setToken(btoa(`${username}:${password}`));
-    Store.dispatch({ type: 'HANDLE_LOGIN', payload: AuthorizationService.isAuthorized() });
+    ConfigStore.dispatch({ type: 'HANDLE_LOGIN', payload: AuthorizationService.isAuthorized() });
     Router.go('/cards');
   }
 }
