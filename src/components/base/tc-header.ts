@@ -15,10 +15,7 @@ export class TcHeader extends LitElement {
   protected render(): TemplateResult {
     return html`<header>
       <span>Yeah! today card</span>
-      <div>
-        ${this._authStateController.isAuthorized ? this._themeTemplate() : null}
-        ${this._authStateController.isAuthorized ? this._logoutTemplate() : null}
-      </div>
+      <div>${this._themeTemplate()} ${this._authStateController.isAuthorized ? this._logoutTemplate() : null}</div>
     </header>`;
   }
 

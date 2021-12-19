@@ -5,22 +5,26 @@
   --background: var(--gray-0, white);
   --color: black;
   --border-table: black;
+  --border-input: black;
 
   --surface-shadow-light: 200 10% 20%;
   --shadow-strength-light: 0.02;
+
+  --focus-color: hsl(165, 82%, 51%);
 }
 
 [data-theme='dark'] {
   --background: var(--gray-9, black);
   --color: white;
   --border-table: white;
+  --border-input: white;
 
   --surface-shadow-dark: 200 50% 3%;
   --shadow-strength-dark: 0.8;
 }
 
 * {
-  accent-color: rgb(29, 233, 182);
+  accent-color: hsl(165, 82%, 51%);
 }
 
 html,
