@@ -1,9 +1,12 @@
 import { ReactiveController, ReactiveControllerHost } from '@lit/reactive-element';
 
+import { ThemeVariant } from '../models';
+import Store from '../utils/store';
+
 export class ThemeSwitchController implements ReactiveController {
   private _host: ReactiveControllerHost;
 
-  themeVariante: 'light' | 'dark' = 'light';
+  themeVariante: ThemeVariant = 'light';
 
   constructor(host: ReactiveControllerHost) {
     this._host = host;
@@ -47,11 +50,13 @@ export class ThemeSwitchController implements ReactiveController {
     if (theme) {
       this.themeVariante = JSON.parse(theme);
       document.body.setAttribute('data-theme', this.themeVariante);
+      Store.dispatch({ type: 'HANDLE_THEME_SWITCH', payload: this.themeVariante });
       this._host.requestUpdate();
     }
   }
 
   private _saveTheme(): void {
     localStorage.setItem('YTC:IS:DARK', JSON.stringify(this.themeVariante));
+    Store.dispatch({ type: 'HANDLE_THEME_SWITCH', payload: this.themeVariante });
   }
 }

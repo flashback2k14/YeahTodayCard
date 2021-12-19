@@ -3,12 +3,12 @@ import { customElement } from 'lit/decorators.js';
 
 import { Router } from '@vaadin/router';
 
-import { AuthorizationService } from '../../../auth/authorization-service';
-import EventBus, { EventNames } from '../../../utils/event-bus';
 import { loginStyles } from '../../../styles';
+import { AuthorizationService } from '../../../auth/authorization-service';
+import Store from '../../../utils/store';
 
 @customElement('tc-login')
-class TcLogin extends LitElement {
+export class TcLogin extends LitElement {
   static styles = loginStyles;
 
   protected render() {
@@ -40,7 +40,7 @@ class TcLogin extends LitElement {
     const password = formData.get('password');
 
     AuthorizationService.setToken(btoa(`${username}:${password}`));
-    EventBus.fire(EventNames.LOGGED_IN);
+    Store.dispatch({ type: 'HANDLE_LOGIN', payload: AuthorizationService.isAuthorized() });
     Router.go('/cards');
   }
 }

@@ -1,21 +1,33 @@
 import { LitElement, html, TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
+
+import { Router } from '@vaadin/router';
 
 import { headerStyles } from '../../styles';
 import { ThemeSwitchController } from '../../controller/theme-switch.controller';
-import { AuthStateController } from '../../controller/auth-state.controller';
+import { AuthorizationService } from '../../auth/authorization-service';
+import Store from '../../utils/store';
 
 @customElement('tc-header')
 export class TcHeader extends LitElement {
   private _themeSwitchController = new ThemeSwitchController(this);
-  private _authStateController = new AuthStateController(this);
+
+  @state()
+  private _isAuthorized: boolean = false;
 
   static styles = headerStyles;
+
+  constructor() {
+    super();
+    Store.select('isAuthenticated').subscribe((value: boolean) => {
+      this._isAuthorized = value;
+    });
+  }
 
   protected render(): TemplateResult {
     return html`<header>
       <span>Yeah! today card</span>
-      <div>${this._themeTemplate()} ${this._authStateController.isAuthorized ? this._logoutTemplate() : null}</div>
+      <div>${this._themeTemplate()} ${this._isAuthorized ? this._logoutTemplate() : null}</div>
     </header>`;
   }
 
@@ -67,7 +79,7 @@ export class TcHeader extends LitElement {
 
   private _logoutTemplate(): TemplateResult {
     return html`<svg
-      @click=${this._authStateController.logout.bind(this._authStateController)}
+      @click=${this._logout}
       title="Logout"
       width="24"
       height="24"
@@ -84,5 +96,11 @@ export class TcHeader extends LitElement {
         stroke-linejoin="round"
       />
     </svg>`;
+  }
+
+  private _logout(): void {
+    AuthorizationService.resetToken();
+    Store.dispatch({ type: 'HANDLE_LOGIN', payload: AuthorizationService.isAuthorized() });
+    Router.go('/');
   }
 }

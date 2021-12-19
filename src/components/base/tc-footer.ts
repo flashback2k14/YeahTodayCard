@@ -1,19 +1,27 @@
-import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { LitElement, html, TemplateResult } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 
-import { AuthStateController } from '../../controller/auth-state.controller';
 import { footerStyles } from '../../styles';
+import Store from '../../utils/store';
 
 @customElement('tc-footer')
 export class TcFooter extends LitElement {
   static styles = footerStyles;
 
-  private _authStateController = new AuthStateController(this);
+  @state()
+  private _isAuthorized: boolean = false;
 
-  protected render() {
+  constructor() {
+    super();
+    Store.select('isAuthenticated').subscribe((value: boolean) => {
+      this._isAuthorized = value;
+    });
+  }
+
+  protected render(): TemplateResult {
     return html`<footer>
       <span>github</span>
-      ${this._authStateController.isAuthorized
+      ${this._isAuthorized
         ? html` <button>
             <svg
               width="24"
