@@ -1,22 +1,24 @@
-import { StoreActionType, ThemeVariant } from '../models';
+import { ThemeVariant } from '../models';
 import { ReducerFn, Store } from '.';
 
-export interface Action {
-  type: StoreActionType;
+export type ConfigStoreActionType = 'HANDLE_LOGIN' | 'HANDLE_THEME_SWITCH';
+
+export interface ConfigAction {
+  type: ConfigStoreActionType;
   payload?: unknown;
 }
 
-export interface State {
+export interface ConfigState {
   isAuthenticated: boolean;
   themeVariant: ThemeVariant;
 }
 
-const initialState: State = {
+const initialState: ConfigState = {
   isAuthenticated: false,
   themeVariant: 'light',
 };
 
-const reducer: ReducerFn<State, Action> = (state: State, action: Action): State => {
+const reducer: ReducerFn<ConfigState, ConfigAction> = (state: ConfigState, action: ConfigAction): ConfigState => {
   switch (action.type) {
     case 'HANDLE_LOGIN': {
       return {
@@ -36,6 +38,6 @@ const reducer: ReducerFn<State, Action> = (state: State, action: Action): State 
   }
 };
 
-const configStore = new Store<State, Action>(reducer, initialState);
+const configStore = new Store<ConfigState, ConfigAction>(reducer, initialState);
 
 export default configStore;

@@ -1,7 +1,7 @@
 import { ReactiveController, ReactiveControllerHost } from '@lit/reactive-element';
 
 import { ThemeVariant } from '../models';
-import ConfigStore from '../store/config-store';
+import ConfigStore from '../store/config.store';
 
 export class ThemeSwitchController implements ReactiveController {
   private _host: ReactiveControllerHost;

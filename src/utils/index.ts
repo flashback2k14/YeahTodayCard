@@ -62,26 +62,31 @@ class InMemoryStore {
     ];
   }
 
-  get data() {
+  get data(): Entry[] {
     return this._data;
   }
 
-  public create(entry: Entry): void {
+  public create(entry: Entry): Entry[] {
     this._data.push(entry);
+    return this._data;
   }
 
-  public update(entryId: string, entry: Entry): void {
+  public update(entryId: string, entry: Entry): Entry[] {
     const foundIndex = this._data.findIndex((entry: Entry) => entry.id === entryId);
+
     if (foundIndex === -1) {
       this._data.push(entry);
     } else {
       this._data[foundIndex] = entry;
     }
+
+    return this._data;
   }
 
-  public delete(entryId: string): void {
+  public delete(entryId: string): Entry[] {
     this._data = this._data.filter((entry: Entry) => entry.id !== entryId);
+    return this._data;
   }
 }
 
-export const store = new InMemoryStore();
+export const inMemoryStore = new InMemoryStore();

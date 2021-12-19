@@ -6,7 +6,7 @@ import { Router } from '@vaadin/router';
 import { headerStyles } from '../../styles';
 import { ThemeSwitchController } from '../../controller/theme-switch.controller';
 import { AuthorizationService } from '../../auth/authorization-service';
-import ConfigStore from '../../store/config-store';
+import ConfigStore from '../../store/config.store';
 
 @customElement('tc-header')
 export class TcHeader extends LitElement {

@@ -14,5 +14,3 @@ export interface EntryDetail {
 }
 
 export type ThemeVariant = 'light' | 'dark';
-
-export type StoreActionType = 'HANDLE_LOGIN' | 'HANDLE_THEME_SWITCH';
