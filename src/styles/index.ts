@@ -163,7 +163,7 @@ export const cardsStyles = css`
 export const cardStyles = css`
   .card-item {
     margin: 8px 4px;
-    padding: var(--size-fluid-3);
+    padding: var(--size-fluid-3) var(--size-fluid-3) 16px var(--size-fluid-3);
 
     border-radius: var(--radius-2);
     box-shadow: var(--shadow-2);
@@ -194,7 +194,29 @@ export const cardStyles = css`
   }
 
   .card-item_content {
+    flex-direction: column;
     margin: 4px 0;
+  }
+
+  .card-item_buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .card-item_buttons svg {
+    margin-top: 4px;
+    cursor: pointer;
+    color: var(--color);
+  }
+
+  .card-item_buttons svg:hover {
+    color: var(--focus-color);
+  }
+
+  .card-item_buttons svg:nth-child(1),
+  .card-item_buttons-right {
+    margin-right: 14px;
   }
 
   .active {
@@ -219,56 +241,43 @@ export const cardStyles = css`
     border-collapse: collapse;
   }
 
-  thead tr th:first-child {
+  .flex-grow {
     flex-grow: 1;
-    border-bottom: 1px solid var(--border-table);
-    border-right: 1px solid var(--border-table);
   }
 
-  thead tr th:nth-child(2) {
+  .flex-none {
     flex: none;
-    width: 48px;
+  }
+
+  .border-top {
+    border-top: 1px solid var(--border-table);
+  }
+
+  .border-right {
+    border-right: 1px solid var(--border-table);
+  }
+
+  .border-bottom {
     border-bottom: 1px solid var(--border-table);
-    border-right: 1px solid var(--border-table);
-    text-align: center;
   }
 
-  thead tr th:last-child {
-    flex: none;
+  .column-width {
     width: 48px;
-    border-bottom: 1px solid var(--border-table);
+  }
+
+  .column-left {
+    padding-left: 8px;
+  }
+
+  .text-center {
     text-align: center;
   }
 
-  tbody tr td:first-child {
-    border-right: 1px solid var(--border-table);
-  }
-
-  tbody tr td:nth-child(2) {
-    border-right: 1px solid var(--border-table);
-    text-align: center;
-  }
-
-  tbody tr td:last-child {
-    text-align: center;
-  }
-
-  tfoot tr td:first-child {
-    border-top: 1px solid var(--border-table);
-    border-right: 1px solid var(--border-table);
+  .text-bold {
     font-weight: bold;
   }
 
-  tfoot tr td:nth-child(2) {
-    border-top: 1px solid var(--border-table);
-    border-right: 1px solid var(--border-table);
-    text-align: center;
-    font-weight: bold;
-  }
-
-  tfoot tr td:last-child {
-    border-top: 1px solid var(--border-table);
-    text-align: center;
-    font-weight: bold;
+  .text-strike-through {
+    text-decoration: line-through;
   }
 `;

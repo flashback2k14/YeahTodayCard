@@ -1,5 +1,4 @@
 import { BehaviorSubject, distinctUntilKeyChanged, map, Observable, Subscription } from 'rxjs';
-import { threadId } from 'worker_threads';
 
 export type ReducerFn<T, A> = (state: T, action: A) => T;
 
@@ -30,7 +29,7 @@ export class Store<T, A> {
   }
 
   dispatch = (action: A): void => {
-    const oldState = JSON.parse(JSON.stringify(this._state.getValue()));
+    const oldState = JSON.parse(JSON.stringify(this._state.getValue())) as T;
     const newState = this._reducer(oldState, action);
     this._state.next(newState);
   };

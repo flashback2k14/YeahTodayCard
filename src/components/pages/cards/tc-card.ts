@@ -3,7 +3,9 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { ClassInfo, classMap } from 'lit/directives/class-map.js';
 
 import { Entry, EntryDetail } from '../../../models';
+import DataStore from '../../../store/data.store';
 import { cardStyles } from '../../../styles';
+import { uuidV4 } from '../../../utils';
 
 @customElement('tc-card')
 export class TcCard extends LitElement {
@@ -21,40 +23,14 @@ export class TcCard extends LitElement {
       <span class=${classMap(this._getTitleClasses())} @click=${this._changeVisibility}>
         ${this.entry?.title} - ${score}
       </span>
-      <section class=${classMap(this._getContentClasses())}>${this._tableTemplate()}</section>
+      <section class=${classMap(this._getContentClasses())}>
+        ${this._tableTemplate()}
+        <div class="card-item_buttons">
+          ${this._deleteButtonTemplate()}
+          <div class="card-item_buttons-right">${this._editButtonTemplate()} ${this._moveButtonTemplate()}</div>
+        </div>
+      </section>
     </li>`;
-  }
-
-  private _calculateScore(): string {
-    return ((this.entry?.totalAwardedPoints ?? 1) / (this.entry?.totalPoints ?? 1)).toFixed(4);
-  }
-
-  private _tableTemplate(): TemplateResult {
-    return html`<table>
-      <thead>
-        <tr>
-          <th>Tasks</th>
-          <th>P</th>
-          <th>A</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${this.entry?.details.map((detail: EntryDetail) => {
-          return html`<tr>
-            <td>${detail.task}</td>
-            <td>${detail.points}</td>
-            <td>${detail.awardedPoints}</td>
-          </tr>`;
-        })}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Sum</td>
-          <td>${this.entry?.totalPoints}</td>
-          <td>${this.entry?.totalAwardedPoints}</td>
-        </tr>
-      </tfoot>
-    </table>`;
   }
 
   /**
@@ -80,5 +56,142 @@ export class TcCard extends LitElement {
       hidden: this._isHidden,
       visible: !this._isHidden,
     };
+  }
+
+  private _getTaskClasses(done: boolean): ClassInfo {
+    return {
+      'border-right': true,
+      'column-left': true,
+      'text-strike-through': done,
+    };
+  }
+
+  private _calculateScore(): string {
+    return ((this.entry?.totalAwardedPoints ?? 1) / (this.entry?.totalPoints ?? 1)).toFixed(4);
+  }
+
+  private _tableTemplate(): TemplateResult {
+    return html`<table>
+      <thead>
+        <tr>
+          <th class="flex-none column-width border-bottom border-right text-center" title="done">D</th>
+          <th class="flex-none column-width border-bottom border-right text-center" title="number">N</th>
+          <th class="flex-grow border-bottom border-right column-left">Tasks</th>
+          <th class="flex-none column-width border-bottom border-right text-center" title="possible points">P</th>
+          <th class="flex-none column-width border-bottom text-center" title="actual points">A</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${this.entry?.details.map((detail: EntryDetail, index: number) => {
+          return html`<tr>
+            <td class="border-right text-center">${this._doneCheckboxTemplate(detail)}</td>
+            <td class="border-right text-center">${++index}</td>
+            <td class=${classMap(this._getTaskClasses(detail.done))}>${detail.task}</td>
+            <td class="border-right text-center">${detail.points}</td>
+            <td class="text-center">${detail.awardedPoints}</td>
+          </tr>`;
+        })}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="border-top border-right text-bold text-center">Sum</td>
+          <td class="border-top border-right"></td>
+          <td class="border-top border-right"></td>
+          <td class="border-top border-right text-bold text-center">${this.entry?.totalPoints}</td>
+          <td class="border-top text-bold text-center">${this.entry?.totalAwardedPoints}</td>
+        </tr>
+      </tfoot>
+    </table>`;
+  }
+
+  private _doneCheckboxTemplate(detail: EntryDetail): TemplateResult {
+    const id = uuidV4();
+    return html`<input
+        id="${id}"
+        type="checkbox"
+        ?checked=${detail.done}
+        @click=${() => this._handleDoneChange(detail)}
+      /><label for="${id}"></label> `;
+  }
+
+  private _handleDoneChange(detail: EntryDetail): void {
+    detail.done = !detail.done;
+    DataStore.dispatch({ type: 'UPDATE', payload: { id: this.entry?.id, data: this.entry } });
+    this.requestUpdate();
+  }
+
+  private _deleteButtonTemplate(): TemplateResult {
+    return html`<svg
+      width="24"
+      height="24"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Delete current entry</title>
+
+      <path
+        d="M19 11V20.4C19 20.7314 18.7314 21 18.4 21H5.6C5.26863 21 5 20.7314 5 20.4V11"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path d="M10 17V11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M14 17V11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+      <path
+        d="M21 7L16 7M3 7L8 7M8 7V3.6C8 3.26863 8.26863 3 8.6 3L15.4 3C15.7314 3 16 3.26863 16 3.6V7M8 7L16 7"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg> `;
+  }
+
+  private _editButtonTemplate(): TemplateResult {
+    return html`<svg
+      width="24"
+      height="24"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Edit current entry</title>
+
+      <path d="M3 21L12 21H21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+      <path
+        d="M12.2218 5.82839L15.0503 2.99996L20 7.94971L17.1716 10.7781M12.2218 5.82839L6.61522 11.435C6.42769 11.6225 6.32233 11.8769 6.32233 12.1421L6.32233 16.6776L10.8579 16.6776C11.1231 16.6776 11.3774 16.5723 11.565 16.3847L17.1716 10.7781M12.2218 5.82839L17.1716 10.7781"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg> `;
+  }
+
+  private _moveButtonTemplate(): TemplateResult {
+    return html`<svg
+      width="24"
+      height="24"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Move open entries to next day</title>
+
+      <path
+        d="M12 6C10.8954 6 10 5.10457 10 4C10 2.89543 10.8954 2 12 2C13.1046 2 14 2.89543 14 4C14 5.10457 13.1046 6 12 6Z"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12 9L12 22M12 22L15 19M12 22L9 19"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg> `;
   }
 }

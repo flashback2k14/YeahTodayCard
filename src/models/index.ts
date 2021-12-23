@@ -11,6 +11,7 @@ export interface EntryDetail {
   task: string;
   points: number;
   awardedPoints: number;
+  done: boolean;
 }
 
 export type ThemeVariant = 'light' | 'dark';
