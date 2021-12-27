@@ -14,4 +14,9 @@ export interface EntryDetail {
   done: boolean;
 }
 
+export interface Points {
+  possible: number;
+  awarded: number;
+}
+
 export type ThemeVariant = 'light' | 'dark';

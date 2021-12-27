@@ -215,6 +215,7 @@ export const cardStyles = css`
   }
 
   .card-item_buttons svg:nth-child(1),
+  .card-item_buttons svg:nth-child(2),
   .card-item_buttons-right {
     margin-right: 14px;
   }
@@ -279,5 +280,29 @@ export const cardStyles = css`
 
   .text-strike-through {
     text-decoration: line-through;
+  }
+
+  .entry-detail_input {
+    border: none;
+    border-bottom: 1px solid var(--border-input);
+    font-size: medium;
+
+    background: var(--background);
+    color: var(--color);
+  }
+
+  .entry-detail_input:focus,
+  .entry-detail_input:hover {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-color);
+  }
+
+  .input_text {
+    width: 98%;
+  }
+
+  .input_number {
+    width: 48px;
+    text-align: center;
   }
 `;

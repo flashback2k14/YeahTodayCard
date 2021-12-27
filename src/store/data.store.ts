@@ -1,12 +1,41 @@
 import { ReducerFn, Store } from '.';
-import { Entry } from '../models';
+import { Entry, EntryDetail } from '../models';
 import { inMemoryStore } from '../utils/index';
 
-export type DataStoreActionType = 'GET' | 'INSERT' | 'UPDATE' | 'DELETE';
+export type DataStoreEntryActionType = 'GET' | 'INSERT' | 'UPDATE' | 'DELETE';
+export type DataStoreDetailActionType = 'INSERT_DETAIL' | 'UPDATE_DETAIL' | 'DELETE_DETAIL';
+export type DataStoreActionType = DataStoreEntryActionType | DataStoreDetailActionType;
+
+export type InsertEntryPayload = {
+  date: string;
+};
+export type UpdateEntryPayload = {
+  id: string;
+  entry: Entry;
+};
+export type DeleteEntryPayload = {
+  entryId: string;
+};
+export type EntryPayload = InsertEntryPayload | UpdateEntryPayload | DeleteEntryPayload;
+
+export type InsertDetailPayload = {
+  entryId: string;
+  task: string;
+};
+export type UpdateDetailPayload = {
+  entryId: string;
+  detailId: string;
+  detail: EntryDetail;
+};
+export type DeleteDetailPayload = {
+  entryId: string;
+  detailId: string;
+};
+export type DetailPayload = InsertDetailPayload | UpdateDetailPayload | DeleteDetailPayload;
 
 export interface DataAction {
   type: DataStoreActionType;
-  payload?: unknown;
+  payload?: EntryPayload | DetailPayload;
 }
 
 export interface DataState {
@@ -28,19 +57,41 @@ const reducer: ReducerFn<DataState, DataAction> = (state: DataState, action: Dat
     case 'INSERT': {
       return {
         ...state,
-        entries: inMemoryStore.create(action.payload as Entry),
+        entries: inMemoryStore.create((action.payload as InsertEntryPayload).date),
+      };
+    }
+    case 'INSERT_DETAIL': {
+      const payload = action.payload as InsertDetailPayload;
+      return {
+        ...state,
+        entries: inMemoryStore.createDetail(payload.entryId, payload.task),
       };
     }
     case 'UPDATE': {
+      const payload = action.payload as UpdateEntryPayload;
       return {
         ...state,
-        entries: inMemoryStore.update((action.payload as any).id, (action.payload as any).data as Entry),
+        entries: inMemoryStore.update(payload.id, payload.entry),
+      };
+    }
+    case 'UPDATE_DETAIL': {
+      const payload = action.payload as UpdateDetailPayload;
+      return {
+        ...state,
+        entries: inMemoryStore.updateDetail(payload.entryId, payload.detailId, payload.detail),
       };
     }
     case 'DELETE': {
       return {
         ...state,
-        entries: inMemoryStore.delete(action.payload as string),
+        entries: inMemoryStore.delete((action.payload as DeleteEntryPayload).entryId),
+      };
+    }
+    case 'DELETE_DETAIL': {
+      const payload = action.payload as DeleteDetailPayload;
+      return {
+        ...state,
+        entries: inMemoryStore.deleteDetail(payload.entryId, payload.detailId),
       };
     }
     default: {

@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { ClassInfo, classMap } from 'lit/directives/class-map.js';
 
 import { Entry, EntryDetail } from '../../../models';
-import DataStore from '../../../store/data.store';
+import DataStore, { InsertDetailPayload, UpdateEntryPayload } from '../../../store/data.store';
 import { cardStyles } from '../../../styles';
 import { uuidV4 } from '../../../utils';
 
@@ -17,6 +17,9 @@ export class TcCard extends LitElement {
   @state()
   private _isHidden: boolean = true;
 
+  @state()
+  private _isEdit: boolean = false;
+
   protected render(): TemplateResult {
     const score = this._calculateScore();
     return html`<li class="card-item">
@@ -27,7 +30,9 @@ export class TcCard extends LitElement {
         ${this._tableTemplate()}
         <div class="card-item_buttons">
           ${this._deleteButtonTemplate()}
-          <div class="card-item_buttons-right">${this._editButtonTemplate()} ${this._moveButtonTemplate()}</div>
+          <div class="card-item_buttons-right">
+            ${this._addButtonTemplate()} ${this._editButtonTemplate()} ${this._moveButtonTemplate()}
+          </div>
         </div>
       </section>
     </li>`;
@@ -70,6 +75,10 @@ export class TcCard extends LitElement {
     return ((this.entry?.totalAwardedPoints ?? 1) / (this.entry?.totalPoints ?? 1)).toFixed(4);
   }
 
+  /**
+   * TEMPLATES
+   */
+
   private _tableTemplate(): TemplateResult {
     return html`<table>
       <thead>
@@ -86,9 +95,27 @@ export class TcCard extends LitElement {
           return html`<tr>
             <td class="border-right text-center">${this._doneCheckboxTemplate(detail)}</td>
             <td class="border-right text-center">${++index}</td>
-            <td class=${classMap(this._getTaskClasses(detail.done))}>${detail.task}</td>
+            <td class=${classMap(this._getTaskClasses(detail.done))}>
+              ${this._isEdit && !detail.done
+                ? html`<input
+                    type="text"
+                    class="entry-detail_input input_text"
+                    .value=${detail.task}
+                    @change=${(ev: InputEvent) => this._handleEditChange(ev, detail, 'task')}
+                  />`
+                : detail.task}
+            </td>
             <td class="border-right text-center">${detail.points}</td>
-            <td class="text-center">${detail.awardedPoints}</td>
+            <td class="text-center">
+              ${this._isEdit && !detail.done
+                ? html`<input
+                    type="number"
+                    class="entry-detail_input input_number"
+                    value=${detail.awardedPoints}
+                    @change=${(ev: InputEvent) => this._handleEditChange(ev, detail, 'awardedPoints')}
+                  />`
+                : detail.awardedPoints}
+            </td>
           </tr>`;
         })}
       </tbody>
@@ -114,14 +141,9 @@ export class TcCard extends LitElement {
       /><label for="${id}"></label> `;
   }
 
-  private _handleDoneChange(detail: EntryDetail): void {
-    detail.done = !detail.done;
-    DataStore.dispatch({ type: 'UPDATE', payload: { id: this.entry?.id, data: this.entry } });
-    this.requestUpdate();
-  }
-
   private _deleteButtonTemplate(): TemplateResult {
     return html`<svg
+      @click=${this._handleDeleteButton}
       width="24"
       height="24"
       stroke-width="1.5"
@@ -148,8 +170,30 @@ export class TcCard extends LitElement {
     </svg> `;
   }
 
+  private _addButtonTemplate(): TemplateResult {
+    return html`<svg
+      @click=${this._handleAddButton}
+      width="24"
+      height="24"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Add new entry</title>
+
+      <path
+        d="M6 12H12M18 12H12M12 12V6M12 12V18"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg> `;
+  }
+
   private _editButtonTemplate(): TemplateResult {
     return html`<svg
+      @click=${this._handleEditButton}
       width="24"
       height="24"
       stroke-width="1.5"
@@ -171,6 +215,7 @@ export class TcCard extends LitElement {
 
   private _moveButtonTemplate(): TemplateResult {
     return html`<svg
+      @click=${this._handleMoveButton}
       width="24"
       height="24"
       stroke-width="1.5"
@@ -193,5 +238,63 @@ export class TcCard extends LitElement {
         stroke-linejoin="round"
       />
     </svg> `;
+  }
+
+  /**
+   * EVENT HANDLER - CHANGE
+   */
+
+  private _handleDoneChange(detail: EntryDetail): void {
+    detail.done = !detail.done;
+    DataStore.dispatch({
+      type: 'UPDATE',
+      payload: { id: this.entry?.id, entry: this.entry } as UpdateEntryPayload,
+    });
+    this.requestUpdate();
+  }
+
+  private _handleEditChange<K extends keyof EntryDetail>(event: InputEvent, detail: EntryDetail, property: K): void {
+    if (property === 'task') {
+      detail.task = (event.currentTarget as HTMLInputElement).value;
+    }
+
+    if (property === 'awardedPoints') {
+      const userInput = +(event.currentTarget as HTMLInputElement).value;
+      detail.awardedPoints = userInput > detail.points ? detail.points : userInput;
+      detail.done = detail.points === detail.awardedPoints;
+    }
+  }
+
+  /**
+   * EVENT HANDLER - CLICK
+   */
+
+  private _handleDeleteButton(): void {
+    alert('delete');
+  }
+
+  private _handleAddButton(): void {
+    DataStore.dispatch({
+      type: 'INSERT_DETAIL',
+      payload: { entryId: this.entry?.id, task: '' } as InsertDetailPayload,
+    });
+    this.requestUpdate();
+  }
+
+  private _handleEditButton(): void {
+    if (this._isEdit) {
+      DataStore.dispatch({
+        type: 'UPDATE',
+        payload: { id: this.entry?.id, entry: this.entry } as UpdateEntryPayload,
+      });
+      this._isEdit = false;
+      this.requestUpdate();
+    } else {
+      this._isEdit = true;
+    }
+  }
+  
+  private _handleMoveButton(): void {
+    alert('move');
   }
 }

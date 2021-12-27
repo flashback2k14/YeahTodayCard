@@ -17,7 +17,6 @@ export class TcCards extends LitElement {
   constructor() {
     super();
     DataStore.selectArray('entries').subscribe((value: Entry[]) => {
-      // console.count('DataStore entries subscribe');
       this._cards = [...value];
     });
   }

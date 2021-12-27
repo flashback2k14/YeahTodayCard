@@ -3,9 +3,6 @@ import { customElement, state } from 'lit/decorators.js';
 
 import { footerStyles } from '../../styles';
 import ConfigStore from '../../store/config.store';
-import DataStore from '../../store/data.store';
-import { Entry } from '../../models';
-import { uuidV4 } from '../../utils';
 
 @customElement('tc-footer')
 export class TcFooter extends LitElement {
@@ -25,7 +22,7 @@ export class TcFooter extends LitElement {
     return html`<footer>
       <span>github</span>
       ${this._isAuthorized
-        ? html` <button @click=${this._test}>
+        ? html` <button>
             <svg
               width="24"
               height="24"
@@ -44,18 +41,5 @@ export class TcFooter extends LitElement {
           </button>`
         : null}
     </footer>`;
-  }
-
-  private _test(): void {
-    DataStore.dispatch({
-      type: 'INSERT',
-      payload: {
-        id: uuidV4(),
-        title: '03.11.2021',
-        totalPoints: 0,
-        totalAwardedPoints: 0,
-        details: [],
-      } as Entry,
-    });
   }
 }
