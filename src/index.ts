@@ -47,3 +47,7 @@ const routes: Route[] = [
 
 export const router = new Router(document.getElementById('outlet'));
 router.setRoutes(routes);
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
