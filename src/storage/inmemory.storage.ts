@@ -1,6 +1,6 @@
-import { Entry, EntryDetail, Points } from '../models';
-import { uuidV4 } from '../utils';
 import { AbstractStorage } from './abstract.storage';
+import { compress, decompress, initializeTestData, uuidV4 } from '../utils';
+import { Entry, EntryDetail } from '../models';
 
 class InMemoryStorage extends AbstractStorage {
   private _data: Entry[];
@@ -108,69 +108,14 @@ class InMemoryStorage extends AbstractStorage {
     return this._data;
   }
 
-  private _save(): void {
-    window.localStorage.setItem('YC:IMS:DATA', JSON.stringify(this._data));
+  private async _save(): Promise<void> {
+    const compressedData = await compress(this._data);
+    window.localStorage.setItem('YTC:IMS:DATA', compressedData);
   }
 
-  private _load(): void {
-    const data = window.localStorage.getItem('YC:IMS:DATA');
-    if (data) {
-      this._data = JSON.parse(data) as Entry[];
-    } else {
-      this._data = [
-        {
-          id: uuidV4(),
-          title: 'Day: 01.11.2021',
-          totalPoints: 6,
-          totalAwardedPoints: 5,
-          details: [
-            {
-              id: uuidV4(),
-              task: 'Task #1',
-              points: 3,
-              awardedPoints: 2,
-              done: false,
-            } as EntryDetail,
-            {
-              id: uuidV4(),
-              task: 'Task #2',
-              points: 2,
-              awardedPoints: 2,
-              done: true,
-            } as EntryDetail,
-            {
-              id: uuidV4(),
-              task: 'Task #3',
-              points: 1,
-              awardedPoints: 1,
-              done: false,
-            } as EntryDetail,
-          ],
-        } as Entry,
-        {
-          id: uuidV4(),
-          title: 'Day: 02.11.2021',
-          totalPoints: 3,
-          totalAwardedPoints: 2,
-          details: [
-            {
-              id: uuidV4(),
-              task: 'Task #4',
-              points: 2,
-              awardedPoints: 1,
-              done: true,
-            } as EntryDetail,
-            {
-              id: uuidV4(),
-              task: 'Task #5',
-              points: 1,
-              awardedPoints: 1,
-              done: false,
-            } as EntryDetail,
-          ],
-        } as Entry,
-      ];
-    }
+  private async _load(): Promise<void> {
+    const data = window.localStorage.getItem('YTC:IMS:DATA');
+    this._data = data ? await decompress(data) : initializeTestData();
   }
 }
 
