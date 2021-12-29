@@ -42,8 +42,14 @@ export class TcLogin extends LitElement {
 
     AuthorizationService.setToken(btoa(`${username}:${password}`));
 
-    ConfigStore.dispatch({ type: 'HANDLE_LOGIN', payload: AuthorizationService.isAuthorized() });
-    DataStore.dispatch({ type: 'GET' });
+    ConfigStore.dispatch({
+      type: 'HANDLE_LOGIN',
+      payload: AuthorizationService.isAuthorized(),
+    });
+
+    DataStore.dispatch({
+      type: 'GET',
+    });
 
     Router.go('/cards');
   }
