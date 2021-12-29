@@ -3,7 +3,12 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { ClassInfo, classMap } from 'lit/directives/class-map.js';
 
 import { Entry, EntryDetail } from '../../../models';
-import DataStore, { InsertDetailPayload, UpdateEntryPayload } from '../../../store/data.store';
+import DataStore, {
+  DeleteDetailPayload,
+  DeleteEntryPayload,
+  InsertDetailPayload,
+  UpdateEntryPayload,
+} from '../../../store/data.store';
 import { cardStyles } from '../../../styles';
 import { uuidV4 } from '../../../utils';
 
@@ -31,7 +36,7 @@ export class TcCard extends LitElement {
         <div class="card-item_buttons">
           ${this._deleteButtonTemplate()}
           <div class="card-item_buttons-right">
-            ${this._addButtonTemplate()} ${this._editButtonTemplate()} ${this._moveButtonTemplate()}
+            ${this._addButtonTemplate()} ${this._editButtonTemplate()} ${this._copyButtonTemplate()}
           </div>
         </div>
       </section>
@@ -72,6 +77,9 @@ export class TcCard extends LitElement {
   }
 
   private _calculateScore(): string {
+    if (this.entry?.totalPoints === 0 && this.entry.totalAwardedPoints === 0) {
+      return '0.0000';
+    }
     return ((this.entry?.totalAwardedPoints ?? 1) / (this.entry?.totalPoints ?? 1)).toFixed(4);
   }
 
@@ -85,9 +93,10 @@ export class TcCard extends LitElement {
         <tr>
           <th class="flex-none column-width border-bottom border-right text-center" title="done">D</th>
           <th class="flex-none column-width border-bottom border-right text-center" title="number">N</th>
-          <th class="flex-grow border-bottom border-right column-left">Tasks</th>
+          <th class="flex-grow column-left border-bottom border-right">Tasks</th>
           <th class="flex-none column-width border-bottom border-right text-center" title="possible points">P</th>
-          <th class="flex-none column-width border-bottom text-center" title="actual points">A</th>
+          <th class="flex-none column-width border-bottom border-right text-center" title="actual points">A</th>
+          <th class="flex-none column-width border-bottom text-center"></th>
         </tr>
       </thead>
       <tbody>
@@ -106,7 +115,7 @@ export class TcCard extends LitElement {
                 : detail.task}
             </td>
             <td class="border-right text-center">${detail.points}</td>
-            <td class="text-center">
+            <td class="border-right text-center">
               ${this._isEdit && !detail.done
                 ? html`<input
                     type="number"
@@ -116,6 +125,7 @@ export class TcCard extends LitElement {
                   />`
                 : detail.awardedPoints}
             </td>
+            <td class="text-center icon">${this._deleteButtonTemplate(detail)}</td>
           </tr>`;
         })}
       </tbody>
@@ -125,7 +135,8 @@ export class TcCard extends LitElement {
           <td class="border-top border-right"></td>
           <td class="border-top border-right"></td>
           <td class="border-top border-right text-bold text-center">${this.entry?.totalPoints}</td>
-          <td class="border-top text-bold text-center">${this.entry?.totalAwardedPoints}</td>
+          <td class="border-top border-right text-bold text-center">${this.entry?.totalAwardedPoints}</td>
+          <td class="border-top"></td>
         </tr>
       </tfoot>
     </table>`;
@@ -141,9 +152,9 @@ export class TcCard extends LitElement {
       /><label for="${id}"></label> `;
   }
 
-  private _deleteButtonTemplate(): TemplateResult {
+  private _deleteButtonTemplate(detail?: EntryDetail): TemplateResult {
     return html`<svg
-      @click=${this._handleDeleteButton}
+      @click=${() => (detail ? this._handleDeleteDetailClick(detail) : this._handleDeleteClick())}
       width="24"
       height="24"
       stroke-width="1.5"
@@ -172,7 +183,7 @@ export class TcCard extends LitElement {
 
   private _addButtonTemplate(): TemplateResult {
     return html`<svg
-      @click=${this._handleAddButton}
+      @click=${this._handleAddClick}
       width="24"
       height="24"
       stroke-width="1.5"
@@ -193,7 +204,7 @@ export class TcCard extends LitElement {
 
   private _editButtonTemplate(): TemplateResult {
     return html`<svg
-      @click=${this._handleEditButton}
+      @click=${this._handleEditClick}
       width="24"
       height="24"
       stroke-width="1.5"
@@ -213,9 +224,9 @@ export class TcCard extends LitElement {
     </svg> `;
   }
 
-  private _moveButtonTemplate(): TemplateResult {
+  private _copyButtonTemplate(): TemplateResult {
     return html`<svg
-      @click=${this._handleMoveButton}
+      @click=${this._handleCopyClick}
       width="24"
       height="24"
       stroke-width="1.5"
@@ -223,7 +234,7 @@ export class TcCard extends LitElement {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>Move open entries to next day</title>
+      <title>Copy open entries to next day</title>
 
       <path
         d="M12 6C10.8954 6 10 5.10457 10 4C10 2.89543 10.8954 2 12 2C13.1046 2 14 2.89543 14 4C14 5.10457 13.1046 6 12 6Z"
@@ -269,23 +280,46 @@ export class TcCard extends LitElement {
    * EVENT HANDLER - CLICK
    */
 
-  private _handleDeleteButton(): void {
-    alert('delete');
-  }
-
-  private _handleAddButton(): void {
+  private _handleDeleteClick(): void {
     DataStore.dispatch({
-      type: 'INSERT_DETAIL',
-      payload: { entryId: this.entry?.id, task: '' } as InsertDetailPayload,
+      type: 'DELETE',
+      payload: {
+        entryId: this.entry?.id,
+      } as DeleteEntryPayload,
     });
     this.requestUpdate();
   }
 
-  private _handleEditButton(): void {
+  private _handleDeleteDetailClick(detail: EntryDetail): void {
+    DataStore.dispatch({
+      type: 'DELETE_DETAIL',
+      payload: {
+        entryId: this.entry?.id,
+        detailId: detail.id,
+      } as DeleteDetailPayload,
+    });
+    this.requestUpdate();
+  }
+
+  private _handleAddClick(): void {
+    DataStore.dispatch({
+      type: 'INSERT_DETAIL',
+      payload: {
+        entryId: this.entry?.id,
+        task: '',
+      } as InsertDetailPayload,
+    });
+    this.requestUpdate();
+  }
+
+  private _handleEditClick(): void {
     if (this._isEdit) {
       DataStore.dispatch({
         type: 'UPDATE',
-        payload: { id: this.entry?.id, entry: this.entry } as UpdateEntryPayload,
+        payload: {
+          id: this.entry?.id,
+          entry: this.entry,
+        } as UpdateEntryPayload,
       });
       this._isEdit = false;
       this.requestUpdate();
@@ -293,8 +327,8 @@ export class TcCard extends LitElement {
       this._isEdit = true;
     }
   }
-  
-  private _handleMoveButton(): void {
-    alert('move');
+
+  private _handleCopyClick(): void {
+    alert('copy');
   }
 }

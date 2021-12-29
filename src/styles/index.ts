@@ -15,7 +15,7 @@ export const headerStyles = css`
   header span {
     margin-left: 16px;
     font-size: larger;
-    letter-spacing: var(--font-letterspacing-1);
+    letter-spacing: 0.025em;
   }
 
   header svg {
@@ -54,7 +54,7 @@ export const footerStyles = css`
 
   footer button {
     position: absolute;
-    bottom: 48px;
+    bottom: 36px;
     left: 0;
     right: 0;
     margin: auto;
@@ -163,7 +163,7 @@ export const cardsStyles = css`
 export const cardStyles = css`
   .card-item {
     margin: 8px 4px;
-    padding: var(--size-fluid-3) var(--size-fluid-3) 16px var(--size-fluid-3);
+    padding: 24px 24px 16px 24px;
 
     border-radius: var(--radius-2);
     box-shadow: var(--shadow-2);
@@ -182,7 +182,11 @@ export const cardStyles = css`
   }
 
   .card-item_title:hover {
-    border-bottom: 1px solid var(--border-table);
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-thickness: 2.5px;
+    text-decoration-line: underline;
+    text-decoration-color: var(--focus-color);
   }
 
   .card-item_title:after {
@@ -214,10 +218,14 @@ export const cardStyles = css`
     color: var(--focus-color);
   }
 
+  .card-item_buttons svg:first-child {
+    margin-left: 14px;
+  }
+
   .card-item_buttons svg:nth-child(1),
   .card-item_buttons svg:nth-child(2),
   .card-item_buttons-right {
-    margin-right: 14px;
+    margin-right: 16px;
   }
 
   .active {
@@ -282,6 +290,18 @@ export const cardStyles = css`
     text-decoration: line-through;
   }
 
+  .icon {
+    transform: scale(0.8);
+    padding-top: 4px;
+
+    cursor: pointer;
+    color: var(--color);
+  }
+
+  .icon:hover {
+    color: var(--focus-color);
+  }
+
   .entry-detail_input {
     border: none;
     border-bottom: 1px solid var(--border-input);
@@ -304,5 +324,50 @@ export const cardStyles = css`
   .input_number {
     width: 48px;
     text-align: center;
+  }
+`;
+
+/**
+ * MODAL STYLING
+ */
+
+export const newModalStyles = css`
+  .new-dialog {
+    border: none;
+    border-radius: var(--radius-2);
+    box-shadow: var(--shadow-2);
+
+    background: var(--background);
+    color: var(--color);
+
+    z-index: 10000;
+  }
+
+  dialog::backdrop {
+    background: rgba(75, 75, 75, 0.2);
+    backdrop-filter: blur(1px);
+  }
+
+  .dialog-container_content {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 24px;
+  }
+
+  .dialog-container_content h3 {
+    margin-top: 0;
+  }
+
+  .dialog-container_content form {
+    display: contents;
+  }
+
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(var(--calender-icon-color));
+    opacity: 1;
+  }
+
+  button {
+    margin-top: 8px;
   }
 `;

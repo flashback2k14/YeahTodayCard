@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;400&display=swap');
-@import 'https://unpkg.com/open-props';
+@import 'https://unpkg.com/open-props/shadows.min.css';
+@import 'https://unpkg.com/open-props/borders.min.css';
+@import 'https://unpkg.com/open-props/colors.min.css';
+@import 'https://unpkg.com/open-props/sizes.min.css';
 
 :root {
   --background: var(--gray-0, white);
@@ -11,6 +14,7 @@
   --shadow-strength-light: 0.02;
 
   --focus-color: hsl(165, 82%, 51%);
+  --calender-icon-color: 0;
 }
 
 [data-theme='dark'] {
@@ -21,6 +25,9 @@
 
   --surface-shadow-dark: 200 50% 3%;
   --shadow-strength-dark: 0.8;
+
+  --focus-color: hsl(165, 82%, 45%);
+  --calender-icon-color: 1;
 }
 
 * {

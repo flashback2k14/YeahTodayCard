@@ -1,7 +1,7 @@
 import { ThemeVariant } from '../models';
 import { ReducerFn, Store } from '.';
 
-export type ConfigStoreActionType = 'HANDLE_LOGIN' | 'HANDLE_THEME_SWITCH';
+export type ConfigStoreActionType = 'HANDLE_LOGIN' | 'HANDLE_THEME_SWITCH' | 'HANDLE_NEW_MODAL_OPEN';
 
 export interface ConfigAction {
   type: ConfigStoreActionType;
@@ -11,11 +11,13 @@ export interface ConfigAction {
 export interface ConfigState {
   isAuthenticated: boolean;
   themeVariant: ThemeVariant;
+  newModalIsOpen: boolean;
 }
 
 const initialState: ConfigState = {
   isAuthenticated: false,
   themeVariant: 'light',
+  newModalIsOpen: false,
 };
 
 const reducer: ReducerFn<ConfigState, ConfigAction> = (state: ConfigState, action: ConfigAction): ConfigState => {
@@ -30,6 +32,12 @@ const reducer: ReducerFn<ConfigState, ConfigAction> = (state: ConfigState, actio
       return {
         ...state,
         themeVariant: action.payload as ThemeVariant,
+      };
+    }
+    case 'HANDLE_NEW_MODAL_OPEN': {
+      return {
+        ...state,
+        newModalIsOpen: !state.newModalIsOpen,
       };
     }
     default: {
