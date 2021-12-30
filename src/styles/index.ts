@@ -83,6 +83,14 @@ export const footerStyles = css`
     outline: none;
     box-shadow: 0 0 0 3px var(--focus-color);
   }
+
+  .show {
+    display: block;
+  }
+
+  .hide {
+    display: none;
+  }
 `;
 
 /**

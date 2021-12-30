@@ -1,5 +1,5 @@
 import { LitElement, html, TemplateResult } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 
 import { footerStyles } from '../../styles';
 import ConfigStore, { ConfigState } from '../../store/config.store';
@@ -7,6 +7,9 @@ import ConfigStore, { ConfigState } from '../../store/config.store';
 @customElement('tc-footer')
 export class TcFooter extends LitElement {
   static styles = footerStyles;
+
+  @query('button')
+  private _button!: HTMLButtonElement;
 
   @state()
   private _isAuthorized: boolean = false;
@@ -20,6 +23,22 @@ export class TcFooter extends LitElement {
       this._isAuthorized = value.isAuthenticated;
       this._isNewModalOpen = value.newModalIsOpen;
     });
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    if ('virtualKeyboard' in navigator) {
+      navigator.virtualKeyboard.overlaysContent = true;
+      navigator.virtualKeyboard.addEventListener('geometrychange', this._handleKeyboardVisibility);
+    }
+  }
+
+  disconnectedCallback(): void {
+    if ('virtualKeyboard' in navigator) {
+      navigator.virtualKeyboard.overlaysContent = false;
+      navigator.virtualKeyboard.removeEventListener('geometrychange', this._handleKeyboardVisibility);
+    }
+    super.disconnectedCallback();
   }
 
   protected render(): TemplateResult {
@@ -71,5 +90,16 @@ export class TcFooter extends LitElement {
     ConfigStore.dispatch({
       type: 'HANDLE_NEW_MODAL_OPEN',
     });
+  }
+
+  private _handleKeyboardVisibility(ev: any): void {
+    const { height } = ev.target.boundingRect;
+    if (height === 0) {
+      this._button.classList.add('show');
+      this._button.classList.remove('hide');
+    } else {
+      this._button.classList.add('hide');
+      this._button.classList.remove('show');
+    }
   }
 }

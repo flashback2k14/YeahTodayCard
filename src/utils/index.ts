@@ -5,6 +5,10 @@ declare global {
     CompressionStream: any;
     DecompressionStream: any;
   }
+
+  interface Navigator {
+    virtualKeyboard: any;
+  }
 }
 
 export function uuidV4(): string {
