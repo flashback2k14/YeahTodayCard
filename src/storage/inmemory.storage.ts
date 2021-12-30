@@ -16,14 +16,7 @@ class InMemoryStorage extends AbstractStorage {
   }
 
   public create(date: string): Entry[] {
-    const entry = {
-      id: uuidV4(),
-      title: `Day: ${date}`,
-      totalPoints: 0,
-      totalAwardedPoints: 0,
-      details: [] as EntryDetail[],
-    } as Entry;
-
+    const entry = this.createEntry(date);
     this._data.push(entry);
     this._save();
     return this._data;
@@ -32,14 +25,7 @@ class InMemoryStorage extends AbstractStorage {
   public createDetail(entryId: string, task: string): Entry[] {
     const foundIndex = this._data.findIndex((entry: Entry) => entry.id === entryId);
     if (foundIndex) {
-      const newDetail = {
-        id: uuidV4(),
-        task: task,
-        done: false,
-        points: 0,
-        awardedPoints: 0,
-      } as EntryDetail;
-
+      const newDetail = this.createEntryDetail(task);
       this._data[foundIndex].details.push(newDetail);
 
       this.reordering(this._data[foundIndex]);
@@ -105,6 +91,14 @@ class InMemoryStorage extends AbstractStorage {
       this.calculate(this._data[foundIndex]);
       this._save();
     }
+    return this._data;
+  }
+
+  public copyDetails(date: string, tasks: string[]): Entry[] {
+    const entry = this.createEntry(date);
+    entry.details = tasks.map((task: string) => this.createEntryDetail(task));
+    this._data.push(entry);
+    this._save();
     return this._data;
   }
 

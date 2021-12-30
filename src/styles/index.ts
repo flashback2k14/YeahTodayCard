@@ -144,6 +144,10 @@ export const loginStyles = css`
     box-shadow: 0 0 0 3px var(--focus-color);
   }
 
+  form button.close {
+    background-image: conic-gradient(from 0.5turn at bottom left, deeppink, rebeccapurple);
+  }
+
   /* Smartphones (portrait and landscape) ----------- */
   @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     form {
@@ -299,7 +303,6 @@ export const cardStyles = css`
   }
 
   .icon {
-    transform: scale(0.8);
     padding-top: 4px;
 
     cursor: pointer;
@@ -339,8 +342,25 @@ export const cardStyles = css`
  * MODAL STYLING
  */
 
-export const newModalStyles = css`
-  .new-dialog {
+export const modalStyles = css`
+  .tc-dialog-container {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(75, 75, 75, 0.1);
+    backdrop-filter: blur(0.05em);
+  }
+
+  .tc-dialog {
+    width: 30vw;
+
     border: none;
     border-radius: var(--radius-2);
     box-shadow: var(--shadow-2);
@@ -348,34 +368,63 @@ export const newModalStyles = css`
     background: var(--background);
     color: var(--color);
 
-    z-index: 10000;
+    z-index: 5;
   }
 
-  dialog::backdrop {
-    background: rgba(75, 75, 75, 0.2);
-    backdrop-filter: blur(1px);
-  }
-
-  .dialog-container_content {
+  .tc-dialog_content {
     display: flex;
     flex-direction: column;
     padding: 12px 24px;
   }
 
-  .dialog-container_content h3 {
+  .tc-dialog_content h3 {
     margin-top: 0;
   }
 
-  .dialog-container_content form {
+  .tc-dialog_content form {
     display: contents;
   }
 
+  /* Smartphones (portrait and landscape) ----------- */
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    .tc-dialog {
+      width: 90vw;
+    }
+  }
+`;
+
+export const newModalStyles = css`
   input[type='date']::-webkit-calendar-picker-indicator {
     filter: invert(var(--calender-icon-color));
     opacity: 1;
   }
 
   button {
+    margin-top: 8px;
+  }
+`;
+
+export const copyModalStyles = css`
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(var(--calender-icon-color));
+    opacity: 1;
+  }
+
+  .tasks-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .align-items {
+    align-items: center;
+  }
+
+  .word-break {
+    width: 80%;
+    word-break: break-all;
+  }
+
+  .margin-top {
     margin-top: 8px;
   }
 `;

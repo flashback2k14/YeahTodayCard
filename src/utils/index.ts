@@ -100,3 +100,28 @@ export function initializeTestData(): Entry[] {
     } as Entry,
   ];
 }
+
+export function formatDate(form: HTMLFormElement): string {
+  const fd = new FormData(form);
+  const selectedDate = fd.get('date')?.toString() ?? Date.now();
+  const formattedDate = new Intl.DateTimeFormat(navigator.language, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(new Date(selectedDate));
+  return formattedDate;
+}
+
+export function getCheckedTasks(form: HTMLFormElement): string[] {
+  const result: string[] = [];
+
+  const tasks = form.elements.namedItem('tasks[]') as RadioNodeList;
+  tasks.forEach((taskNode: Node) => {
+    const taskInput = taskNode as HTMLInputElement;
+    if (taskInput.checked) {
+      result.push(taskInput.value);
+    }
+  });
+
+  return result;
+}

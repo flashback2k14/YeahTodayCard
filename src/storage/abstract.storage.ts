@@ -1,4 +1,5 @@
 import { Entry, EntryDetail, Points } from '../models';
+import { uuidV4 } from '../utils';
 
 export abstract class AbstractStorage {
   abstract get data(): Entry[];
@@ -14,6 +15,28 @@ export abstract class AbstractStorage {
   abstract updateDetail(entryId: string, detailId: string, detail: EntryDetail): Entry[];
 
   abstract deleteDetail(entryId: string, detailId: string): Entry[];
+
+  abstract copyDetails(date: string, tasks: string[]): Entry[];
+
+  protected createEntry(date: string): Entry {
+    return {
+      id: uuidV4(),
+      title: `Day: ${date}`,
+      totalPoints: 0,
+      totalAwardedPoints: 0,
+      details: [] as EntryDetail[],
+    } as Entry;
+  }
+
+  protected createEntryDetail(task: string): EntryDetail {
+    return {
+      id: uuidV4(),
+      task: task,
+      done: false,
+      points: 0,
+      awardedPoints: 0,
+    } as EntryDetail;
+  }
 
   protected reordering(entry: Entry): void {
     let detailSize = entry.details.length;

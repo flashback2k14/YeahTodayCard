@@ -4,7 +4,7 @@ import { AbstractStorage } from '../storage/abstract.storage';
 import { inMemoryStorage } from '../storage/inmemory.storage';
 
 export type DataStoreEntryActionType = 'GET' | 'INSERT' | 'UPDATE' | 'DELETE';
-export type DataStoreDetailActionType = 'INSERT_DETAIL' | 'UPDATE_DETAIL' | 'DELETE_DETAIL';
+export type DataStoreDetailActionType = 'INSERT_DETAIL' | 'UPDATE_DETAIL' | 'DELETE_DETAIL' | 'COPY_DETAILS';
 export type DataStoreActionType = DataStoreEntryActionType | DataStoreDetailActionType;
 
 export type InsertEntryPayload = {
@@ -32,7 +32,11 @@ export type DeleteDetailPayload = {
   entryId: string;
   detailId: string;
 };
-export type DetailPayload = InsertDetailPayload | UpdateDetailPayload | DeleteDetailPayload;
+export type CopyDetailsPayload = {
+  date: string;
+  tasks: string[];
+};
+export type DetailPayload = InsertDetailPayload | UpdateDetailPayload | DeleteDetailPayload | CopyDetailsPayload;
 
 export interface DataAction {
   type: DataStoreActionType;
@@ -95,6 +99,13 @@ const reducer: ReducerWithStorageFn<DataState, DataAction> =
         return {
           ...state,
           entries: storage.deleteDetail(payload.entryId, payload.detailId),
+        };
+      }
+      case 'COPY_DETAILS': {
+        const payload = action.payload as CopyDetailsPayload;
+        return {
+          ...state,
+          entries: storage.copyDetails(payload.date, payload.tasks),
         };
       }
       default: {

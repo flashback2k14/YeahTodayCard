@@ -11,6 +11,7 @@ import DataStore, {
 } from '../../../store/data.store';
 import { cardStyles } from '../../../styles';
 import { uuidV4 } from '../../../utils';
+import ConfigStore from '../../../store/config.store';
 
 @customElement('tc-card')
 export class TcCard extends LitElement {
@@ -329,6 +330,15 @@ export class TcCard extends LitElement {
   }
 
   private _handleCopyClick(): void {
-    alert('copy');
+    ConfigStore.dispatch({
+      type: 'HANDLE_TASKS_FOR_COPY_TRANSFER',
+      payload: this.entry?.details
+        .filter((detail: EntryDetail) => !detail.done)
+        .map((detail: EntryDetail) => detail.task),
+    });
+
+    ConfigStore.dispatch({
+      type: 'HANDLE_COPY_MODAL_OPEN',
+    });
   }
 }
