@@ -56,7 +56,7 @@ export const footerStyles = css`
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #fff;
+    color: var(--color);
     outline: none;
   }
 
@@ -67,7 +67,7 @@ export const footerStyles = css`
   }
 
   .footer-anchor:visited {
-    color: #fff;
+    color: var(--color);
   }
 
   .footer-anchor span {
