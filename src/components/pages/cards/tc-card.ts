@@ -153,6 +153,28 @@ export class TcCard extends LitElement {
       /><label for="${id}"></label> `;
   }
 
+  /**
+   * https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_dropdown_hover
+   * @param detail
+   * @returns
+   */
+  private _menuButtonTemplate(detail: EntryDetail): TemplateResult {
+    return html`<svg
+      width="24"
+      height="24"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Open actions</title>
+
+      <path d="M3 5H21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M3 12H21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M3 19H21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+    </svg> `;
+  }
+
   private _deleteButtonTemplate(detail?: EntryDetail): TemplateResult {
     return html`<svg
       @click=${() => (detail ? this._handleDeleteDetailClick(detail) : this._handleDeleteClick())}
