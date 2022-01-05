@@ -48,13 +48,40 @@ export const footerStyles = css`
     height: 48px;
   }
 
-  footer span {
-    margin-left: 16px;
+  footer a {
+    margin-left: 6px;
+  }
+
+  .footer-anchor {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    outline: none;
+  }
+
+  .footer-anchor:hover,
+  .footer-anchor:focus {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .footer-anchor:visited {
+    color: #fff;
+  }
+
+  .footer-anchor span {
+    font-size: small;
+  }
+
+  .footer-icon {
+    margin-left: 8px;
+    margin-right: 12px;
   }
 
   footer button {
     position: absolute;
-    bottom: 36px;
+    bottom: 40px;
     left: 0;
     right: 0;
     margin: auto;

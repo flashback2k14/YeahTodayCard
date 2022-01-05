@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import { Entry } from '../../../models';
@@ -21,9 +21,21 @@ export class TcCards extends LitElement {
     });
   }
 
-  protected render() {
+  protected render(): TemplateResult {
+    return this._cards?.length > 0 ? this._renderCards() : this._renderNoCards();
+  }
+
+  private _renderNoCards(): TemplateResult {
+    return html`<div class="no-cards-container">
+      <h2>No data available.</h2>
+    </div>`;
+  }
+
+  private _renderCards(): TemplateResult {
     return html`<ul class="card-list">
-      ${this._cards.map((entry: Entry) => html`<tc-card key=${entry.title} .entry=${entry}></tc-card>`)}
+      ${this._cards.map((entry: Entry) => {
+        return html`<tc-card key=${entry.title} .entry=${entry}></tc-card>`;
+      })}
     </ul>`;
   }
 }

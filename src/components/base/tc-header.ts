@@ -26,7 +26,7 @@ export class TcHeader extends LitElement {
 
   protected render(): TemplateResult {
     return html`<header>
-      <span>Yeah! today card</span>
+      <span>yeah! today</span>
       <div>${this._themeTemplate()} ${this._isAuthorized ? this._logoutTemplate() : null}</div>
     </header>`;
   }

@@ -24,7 +24,7 @@ class InMemoryStorage extends AbstractStorage {
 
   public createDetail(entryId: string, task: string): Entry[] {
     const foundIndex = this._data.findIndex((entry: Entry) => entry.id === entryId);
-    if (foundIndex) {
+    if (foundIndex !== -1) {
       const newDetail = this.createEntryDetail(task);
       this._data[foundIndex].details.push(newDetail);
 
@@ -55,7 +55,7 @@ class InMemoryStorage extends AbstractStorage {
   public updateDetail(entryId: string, detailId: string, detail: EntryDetail): Entry[] {
     const foundIndex = this._data.findIndex((entry: Entry) => entry.id === entryId);
 
-    if (foundIndex) {
+    if (foundIndex !== -1) {
       const foundDetailIndex = this._data[foundIndex].details.findIndex(
         (detail: EntryDetail) => detail.id === detailId
       );
@@ -82,7 +82,7 @@ class InMemoryStorage extends AbstractStorage {
 
   public deleteDetail(entryId: string, detailId: string): Entry[] {
     const foundIndex = this._data.findIndex((entry: Entry) => entry.id === entryId);
-    if (foundIndex) {
+    if (foundIndex !== -1) {
       this._data[foundIndex].details = this._data[foundIndex].details.filter(
         (detail: EntryDetail) => detail.id !== detailId
       );
