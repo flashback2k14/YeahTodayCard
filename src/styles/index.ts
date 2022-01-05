@@ -76,7 +76,11 @@ export const footerStyles = css`
 
   .footer-icon {
     margin-left: 8px;
-    margin-right: 12px;
+    margin-right: 8px;
+  }
+
+  footer a svg {
+    color: var(--color);
   }
 
   footer button {
