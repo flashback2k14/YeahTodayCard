@@ -1,4 +1,4 @@
-const version = '1.3.2';
+const version = '1.3.3';
 const cacheName = `today-card-app-${version}`;
 
 self.addEventListener('install', (e) => {
