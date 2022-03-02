@@ -115,13 +115,23 @@ export function formatDate(form: HTMLFormElement): string {
 export function getCheckedTasks(form: HTMLFormElement): string[] {
   const result: string[] = [];
 
-  const tasks = form.elements.namedItem('tasks[]') as RadioNodeList;
-  tasks.forEach((taskNode: Node) => {
-    const taskInput = taskNode as HTMLInputElement;
+  const tasks = form.elements.namedItem('tasks[]') as RadioNodeList | Element | null;
+
+  if (tasks instanceof RadioNodeList) {
+    tasks.forEach((taskNode: Node) => {
+      const taskInput = taskNode as HTMLInputElement;
+      if (taskInput.checked) {
+        result.push(taskInput.value);
+      }
+    });
+  }
+
+  if (tasks instanceof Element) {
+    const taskInput = tasks as HTMLInputElement;
     if (taskInput.checked) {
       result.push(taskInput.value);
     }
-  });
+  }
 
   return result;
 }
